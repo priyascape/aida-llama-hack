@@ -25,7 +25,7 @@ These features make it possible to achieve the powerful features of the AIDA pla
 
 ![aida-platform](./assets/desktop-demo.png)
 
-Pressentation: https://docs.google.com/presentation/d/1g0JUu5MO6zIq_J36H3KidzibiPjpDMR9UTmYJz573Zg/edit?slide=id.p#slide=id.p
+Presentation: https://tinyurl.com/3xvw2vn6
 
 
 ### Run in containers
