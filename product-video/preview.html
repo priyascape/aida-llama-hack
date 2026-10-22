@@ -1,0 +1,730 @@
+<title>AIDA Product Video Preview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root {
+  --bg: #0a1628;
+  --fg: #ffffff;
+  --accent: #00b4ff;
+  --accent-warm: #ff6b6b;
+  --accent-green: #4ecdc4;
+  --accent-purple: #a855f7;
+  --muted: #7eb8da;
+  --surface: rgba(255,255,255,0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.video-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.player {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, #0a1628 0%, #1a2d4a 50%, #0d1f3c 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  text-align: center;
+}
+
+.scene.active {
+  opacity: 1;
+}
+
+/* Scene 1: Intro */
+.scene-intro {
+  background: radial-gradient(ellipse at center, #1a3a5c 0%, #0a1628 70%);
+}
+
+.logo {
+  width: 140px;
+  height: auto;
+  filter: drop-shadow(0 0 30px rgba(0, 150, 255, 0.5));
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.tagline {
+  font-size: clamp(16px, 4vw, 28px);
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 16px;
+  color: var(--fg);
+}
+
+.subtitle {
+  font-size: clamp(12px, 3vw, 18px);
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* Scene 2: Problem */
+.scene-problem {
+  background: linear-gradient(135deg, #1a0a0a 0%, #2d1a1a 50%, #1a0a0a 100%);
+}
+
+.problem-title {
+  font-size: clamp(24px, 6vw, 42px);
+  font-weight: 700;
+  color: var(--accent-warm);
+  text-shadow: 0 0 40px rgba(255, 107, 107, 0.5);
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.stat {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  min-width: 0;
+}
+
+.stat-number {
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 800;
+  color: var(--accent-warm);
+}
+
+.stat-label {
+  font-size: clamp(10px, 2vw, 12px);
+  color: #ccaaaa;
+  max-width: 120px;
+}
+
+/* Scene 3: Solution */
+.scene-solution {
+  background: linear-gradient(135deg, #0a1a28 0%, #0d2840 50%, #0a1a28 100%);
+}
+
+.intro-text {
+  font-size: clamp(14px, 3vw, 20px);
+  font-weight: 300;
+  color: var(--accent-green);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.solution-points {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.point {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(12px, 3vw, 18px);
+}
+
+.point-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 15px rgba(78, 205, 196, 0.6);
+  flex-shrink: 0;
+}
+
+/* Scene 4: Features */
+.scene-features {
+  background: linear-gradient(180deg, #0a1628 0%, #0d1f3c 50%, #0a1628 100%);
+}
+
+.features-title {
+  font-size: clamp(18px, 4vw, 32px);
+  font-weight: 700;
+}
+
+.features-title span {
+  color: var(--accent);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.feature {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.feature-icon {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.feature-title {
+  font-size: clamp(11px, 2.5vw, 14px);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.feature-desc {
+  font-size: clamp(9px, 2vw, 11px);
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.feature:nth-child(1) .feature-title { color: var(--accent-warm); }
+.feature:nth-child(2) .feature-title { color: var(--accent-green); }
+.feature:nth-child(3) .feature-title { color: #f7b731; }
+.feature:nth-child(4) .feature-title { color: var(--accent-purple); }
+
+/* Scene 5: Demo */
+.scene-demo {
+  background: linear-gradient(135deg, #0a1628 0%, #1a2d4a 50%, #0d1f3c 100%);
+}
+
+.demo-title {
+  font-size: clamp(16px, 4vw, 28px);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.demo-frame {
+  background: #1a2744;
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+}
+
+.demo-toolbar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.demo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.demo-dot:nth-child(1) { background: #ff5f57; }
+.demo-dot:nth-child(2) { background: #febc2e; }
+.demo-dot:nth-child(3) { background: #28c840; }
+
+.demo-content {
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 12px;
+  text-align: left;
+}
+
+.demo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 10px;
+  color: #333;
+}
+
+.demo-badge {
+  font-size: 8px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  color: white;
+}
+
+.demo-badge.flood { background: #ff9800; }
+.demo-badge.conflict { background: #f44336; }
+
+.demo-tags {
+  display: flex;
+  gap: 4px;
+}
+
+.demo-tag {
+  font-size: 8px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+/* Scene 6: Tech Stack */
+.scene-tech {
+  background: linear-gradient(135deg, #0f0a1a 0%, #1a1028 50%, #0f0a1a 100%);
+}
+
+.tech-title {
+  font-size: clamp(16px, 4vw, 28px);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.tech-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.tech-icon { font-size: 28px; }
+.tech-name {
+  font-size: clamp(10px, 2.5vw, 14px);
+  font-weight: 600;
+  color: var(--accent-purple);
+}
+
+.powered-by {
+  margin-top: 16px;
+  font-size: clamp(12px, 2.5vw, 16px);
+  color: #8b8b9a;
+}
+
+.powered-by span {
+  color: var(--accent-purple);
+  font-weight: 700;
+}
+
+/* Scene 7: CTA */
+.scene-cta {
+  background: radial-gradient(ellipse at center, #1a3050 0%, #0a1628 70%);
+}
+
+.cta-title {
+  font-size: clamp(20px, 5vw, 36px);
+  font-weight: 700;
+  margin: 16px 0 8px;
+}
+
+.cta-subtitle {
+  font-size: clamp(12px, 3vw, 18px);
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.ph-button {
+  background: linear-gradient(135deg, #da552f 0%, #ff6b4a 100%);
+  padding: 12px 24px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(14px, 3vw, 18px);
+  font-weight: 700;
+  box-shadow: 0 0 30px rgba(218, 85, 47, 0.4);
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 30px rgba(218, 85, 47, 0.4); }
+  50% { box-shadow: 0 0 50px rgba(218, 85, 47, 0.6); }
+}
+
+.github-link {
+  margin-top: 16px;
+  font-size: clamp(10px, 2.5vw, 14px);
+  color: var(--muted);
+  font-family: monospace;
+}
+
+.team {
+  margin-top: 12px;
+  font-size: clamp(10px, 2vw, 12px);
+  color: #5a7a9a;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.play-btn {
+  background: var(--accent);
+  border: none;
+  color: var(--bg);
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.play-btn:hover {
+  background: #33c4ff;
+}
+
+.scene-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.scene-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.scene-dot.active {
+  background: var(--accent);
+  transform: scale(1.2);
+}
+
+.progress {
+  width: 100%;
+  max-width: 300px;
+  height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+.time {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+h2 {
+  font-size: clamp(16px, 4vw, 24px);
+  margin-bottom: 16px;
+  color: var(--muted);
+}
+
+.info {
+  max-width: 800px;
+  margin: 32px auto 0;
+  padding: 20px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.info h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+
+.info p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.info code {
+  background: rgba(0,180,255,0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+</style>
+
+<div class="video-container">
+  <h2>AIDA Product Video Preview</h2>
+
+  <div class="player" id="player">
+    <!-- Scene 1: Intro -->
+    <div class="scene scene-intro active" data-scene="0">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300b4ff'/%3E%3Cstop offset='100%25' stop-color='%234ecdc4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='100' cy='80' r='50' fill='url(%23g)' opacity='0.8'/%3E%3Cpath d='M60 90 Q100 130 140 90' stroke='%2300b4ff' stroke-width='4' fill='none'/%3E%3Ccircle cx='70' cy='60' r='5' fill='%23ff6b9d'/%3E%3Ccircle cx='130' cy='60' r='5' fill='%23ff6b9d'/%3E%3Ccircle cx='100' cy='40' r='4' fill='%2300b4ff'/%3E%3Ctext x='100' y='160' text-anchor='middle' font-family='system-ui' font-size='28' font-weight='700' fill='%23ffffff'%3EAIDA%3C/text%3E%3Ctext x='100' y='180' text-anchor='middle' font-family='system-ui' font-size='10' fill='%237eb8da'%3ECrisis Intelligence%3C/text%3E%3C/svg%3E" class="logo" alt="AIDA Logo">
+      <div class="tagline">Crisis Intelligence</div>
+      <div class="subtitle">AI-Powered Humanitarian Response Platform</div>
+    </div>
+
+    <!-- Scene 2: Problem -->
+    <div class="scene scene-problem" data-scene="1">
+      <div class="problem-title">The Challenge</div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">387M</div>
+          <div class="stat-label">People affected annually</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">72hrs</div>
+          <div class="stat-label">Critical response window</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">40%</div>
+          <div class="stat-label">Aid misallocated</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 3: Solution -->
+    <div class="scene scene-solution" data-scene="2">
+      <div class="intro-text">Introducing</div>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 120'%3E%3Cdefs%3E%3ClinearGradient id='g2' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234ecdc4'/%3E%3Cstop offset='100%25' stop-color='%2300b4ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='100' cy='50' r='35' fill='url(%23g2)' opacity='0.8'/%3E%3Ctext x='100' y='100' text-anchor='middle' font-family='system-ui' font-size='24' font-weight='700' fill='%23ffffff'%3EAIDA%3C/text%3E%3C/svg%3E" class="logo" style="width:100px" alt="AIDA">
+      <div class="solution-points">
+        <div class="point"><div class="point-dot"></div> Instant disaster detection</div>
+        <div class="point"><div class="point-dot"></div> AI-powered resource allocation</div>
+        <div class="point"><div class="point-dot"></div> Real-time situation analysis</div>
+      </div>
+    </div>
+
+    <!-- Scene 4: Features -->
+    <div class="scene scene-features" data-scene="3">
+      <div class="features-title">Powered by <span>Llama 3.2 Vision</span></div>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon">🛰️</div>
+          <div class="feature-title">Disaster Detection</div>
+          <div class="feature-desc">Analyze satellite imagery to classify crisis types</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-title">AI Image Analysis</div>
+          <div class="feature-desc">Generate detailed disaster scene descriptions</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📦</div>
+          <div class="feature-title">Resource Extraction</div>
+          <div class="feature-desc">Identify needed supplies from victim reports</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🗺️</div>
+          <div class="feature-title">Area Segmentation</div>
+          <div class="feature-desc">Precise mapping with SAM2 technology</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 5: Demo -->
+    <div class="scene scene-demo" data-scene="4">
+      <div class="demo-title">Real-Time Crisis Dashboard</div>
+      <div class="demo-frame">
+        <div class="demo-toolbar">
+          <div class="demo-dot"></div>
+          <div class="demo-dot"></div>
+          <div class="demo-dot"></div>
+        </div>
+        <div class="demo-content">
+          <div class="demo-row">
+            <span class="demo-badge flood">Flood</span>
+            <span>Valencia, Spain</span>
+            <div class="demo-tags">
+              <span class="demo-tag">shelter</span>
+              <span class="demo-tag">food</span>
+            </div>
+          </div>
+          <div class="demo-row">
+            <span class="demo-badge conflict">Conflict</span>
+            <span>Ukraine</span>
+            <div class="demo-tags">
+              <span class="demo-tag">water</span>
+              <span class="demo-tag">medical</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 6: Tech Stack -->
+    <div class="scene scene-tech" data-scene="5">
+      <div class="tech-title">Built with Cutting-Edge Tech</div>
+      <div class="tech-grid">
+        <div class="tech-item">
+          <div class="tech-icon">🦙</div>
+          <div class="tech-name">Llama 3.2</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">🎯</div>
+          <div class="tech-name">SAM2</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">⚡</div>
+          <div class="tech-name">FastAPI</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">🔥</div>
+          <div class="tech-name">PyTorch</div>
+        </div>
+      </div>
+      <div class="powered-by">Powered by <span>Meta Llama</span></div>
+    </div>
+
+    <!-- Scene 7: CTA -->
+    <div class="scene scene-cta" data-scene="6">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300b4ff'/%3E%3Cstop offset='100%25' stop-color='%234ecdc4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='35' fill='url(%23g3)' opacity='0.8'/%3E%3C/svg%3E" style="width:80px" alt="AIDA">
+      <div class="cta-title">Join the Mission</div>
+      <div class="cta-subtitle">Help revolutionize humanitarian response with AI</div>
+      <div class="ph-button">🚀 Upvote on Product Hunt</div>
+      <div class="github-link">⭐ github.com/priyascape/aida-llama-hack</div>
+      <div class="team">Built with ❤️ by Priya, Nitish, Nihir & Habeeb</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="play-btn" id="playBtn">▶ Play</button>
+    <div class="scene-dots" id="dots"></div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:12px;justify-content:center;margin-top:12px">
+    <span class="time" id="currentTime">0:00</span>
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <span class="time" id="totalTime">0:30</span>
+  </div>
+
+  <div class="info">
+    <h3>How to render the final video</h3>
+    <p>Clone the repo and run these commands:</p>
+    <p style="margin-top:12px">
+      <code>cd product-video && npm install && npm run build</code>
+    </p>
+    <p style="margin-top:12px">Output: <code>out/aida-product-hunt.mp4</code></p>
+  </div>
+</div>
+
+<script>
+const scenes = document.querySelectorAll('.scene');
+const dotsContainer = document.getElementById('dots');
+const playBtn = document.getElementById('playBtn');
+const progressBar = document.getElementById('progressBar');
+const currentTimeEl = document.getElementById('currentTime');
+
+let currentScene = 0;
+let isPlaying = false;
+let interval = null;
+let elapsed = 0;
+const sceneDuration = 4000;
+const totalDuration = scenes.length * sceneDuration;
+
+scenes.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'scene-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goToScene(i);
+  dotsContainer.appendChild(dot);
+});
+
+function goToScene(index) {
+  scenes.forEach(s => s.classList.remove('active'));
+  scenes[index].classList.add('active');
+  document.querySelectorAll('.scene-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === index);
+  });
+  currentScene = index;
+  elapsed = index * sceneDuration;
+  updateProgress();
+}
+
+function updateProgress() {
+  const percent = (elapsed / totalDuration) * 100;
+  progressBar.style.width = percent + '%';
+  const secs = Math.floor(elapsed / 1000);
+  currentTimeEl.textContent = '0:' + String(secs).padStart(2, '0');
+}
+
+function play() {
+  if (isPlaying) {
+    isPlaying = false;
+    playBtn.textContent = '▶ Play';
+    clearInterval(interval);
+    return;
+  }
+
+  isPlaying = true;
+  playBtn.textContent = '⏸ Pause';
+
+  interval = setInterval(() => {
+    elapsed += 100;
+    updateProgress();
+
+    const newScene = Math.floor(elapsed / sceneDuration);
+    if (newScene !== currentScene && newScene < scenes.length) {
+      goToScene(newScene);
+    }
+
+    if (elapsed >= totalDuration) {
+      elapsed = 0;
+      goToScene(0);
+    }
+  }, 100);
+}
+
+playBtn.onclick = play;
+
+goToScene(0);
+</script>
